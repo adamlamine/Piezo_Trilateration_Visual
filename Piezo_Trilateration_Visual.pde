@@ -1,12 +1,12 @@
 float[] cornerX =  {0, 1000, 0, 1000};
 float[] cornerY =  {0, 0, 1000, 1000};
 
-float w = 700;
-float h = 700;
+float w = 1000;
+float h = 1000;
 
 float currentTime = 0;
 float measurementStart = currentTime;
-float soundSpeed = 20;
+float soundSpeed = 3;
 float impactTime = 0;
 boolean measurementStarted = false;
 
@@ -15,14 +15,14 @@ ArrayList<Piezo> piezoList = new ArrayList<Piezo>();
 
 
 void setup() {
-  size(700, 700);
+  size(1000, 1000);
   background(255);
   ellipseMode(RADIUS);
 
   piezoList.add(new Piezo(0, 0));
-  piezoList.add(new Piezo(w, 0));
-  piezoList.add(new Piezo(0, h));
-  piezoList.add(new Piezo(w, h));
+  piezoList.add(new Piezo(1000, 0));
+  piezoList.add(new Piezo(0, 1000));
+  piezoList.add(new Piezo(1000, 1000));
 }
 
 void draw() {
@@ -30,11 +30,11 @@ void draw() {
   strokeWeight(1);
   background(255);
 
-  for (int i = 0; i < w; i+=10) {
-    for (int j = 0; j < h; j+=10) {
+  for (int i = 0; i < 1000; i+=10) {
+    for (int j = 0; j < 1000; j+=10) {
       fill(255);
       stroke(225);
-      rect(i, j, w/10, h/10);
+      rect(i, j, 10, 10);
     }
   }
 
@@ -53,7 +53,6 @@ void draw() {
     }
   }
 
-  /*
   text("d0 = " + piezoList.get(0).deltaZeroTime*soundSpeed, 10, 100);
   text("d0 = " + piezoList.get(1).deltaZeroTime*soundSpeed, 810, 100);
   text("d0 = " + piezoList.get(2).deltaZeroTime*soundSpeed, 10, 900);
@@ -68,7 +67,6 @@ void draw() {
   text("Δd2 = " + floor(piezoList.get(1).deltaTime*soundSpeed), 810, 160);
   text("Δd3 = " + floor(piezoList.get(2).deltaTime*soundSpeed), 10, 960);
   text("Δd4 = " + floor(piezoList.get(3).deltaTime*soundSpeed), 810, 960);
-  */
 }
 
 
@@ -97,6 +95,8 @@ void showMeasurement() {
   float d04 = piezoList.get(3).deltaZeroTime*soundSpeed;
 
   //HYPERBEL MIT FOCII d1 und d2
+  float centerX1 = 500;
+  float centerY1 = 0;
   float k1 =  (d1-d2);
   float a1 = k1/2;
   float c1 = w/2;
@@ -106,11 +106,15 @@ void showMeasurement() {
   
 
   //HYPERBEL MIT FOCII d1 und d3
+  float centerX2 = 0;
+  float centerY2 = 500;
   float k2 =  (d1-d3);
   float a2 = k2/2;
   float c2 = w/2;
   //println("2. Hyperbel: " + "((y+500)^2" + "/" + pow(a2, 2) + ")" + "-" + "(x^2)" + "/" + (pow(c2, 2) - pow(a2, 2)) + " = 1");
   
+
+  Pofloat floatersection = new Pofloat();
 
   Pofloat sectorStart = new Pofloat();
   float sectorWidth = w/2;
@@ -119,8 +123,8 @@ void showMeasurement() {
 
   //SEKTOR BESTIMMUNG
   if (d1 <= 5 && d2 <= 5 && d3 <= 5 && d4 <= 5) {
-    sectorStart.x = w/2-20;
-    sectorStart.y = h/2-20;
+    sectorStart.x = 480;
+    sectorStart.y = 480;
     sectorWidth = 40;
     sectorHeight = 40;
   } else {
@@ -128,14 +132,14 @@ void showMeasurement() {
       sectorStart.x = 0;
       sectorStart.y = 0;
     } else if (d2 == 0) {
-      sectorStart.x = w/2;
+      sectorStart.x = 500;
       sectorStart.y = 0;
     } else if (d3 == 0) {
       sectorStart.x = 0;
-      sectorStart.y = h/2;
+      sectorStart.y = 500;
     } else if (d4 == 0) {
-      sectorStart.x = w/2;
-      sectorStart.y = h/2;
+      sectorStart.x = 500;
+      sectorStart.y = 500;
     }
   }
 
@@ -156,27 +160,24 @@ void showMeasurement() {
   }
   
   if (measurementComplete) {
-    float granularity = 0.5;
-    //outer: for (float y = sectorStart.y; y < sectorStart.y+sectorHeight; y+=granularity) {
-      //for (float x = sectorStart.x; x < sectorStart.x+sectorWidth; x+=granularity) {
-    outer: for (float y = 0; y < h; y+=granularity) {
-      for (float x = 0; x < w; x+=granularity) {
+    //outer: for (float y = sectorStart.y; y < sectorStart.y+sectorHeight; y+=1) {
+    //  for (float x = sectorStart.x; x < sectorStart.x+sectorWidth; x+=1) {
+    outer: for (float y = 0; y < h; y+=1) {
+      for (float x = 0; x < w; x+=1) {
         strokeWeight(0);
         
         
         float Px = x;
         float Py = 0-y;
-        float equationResult1 = (pow((Px - w/2),2)/pow(a1, 2)) - pow(Py,2)/(pow(c1, 2) - pow(a1, 2));
-        float equationResult2 = (pow( (Py + h/2) ,2) /pow(a2, 2)) - pow(Px,2)/(pow(c2, 2) - pow(a2, 2));
+        float equationResult1 = (pow((Px - 500),2)/pow(a1, 2)) - pow(Py,2)/(pow(c1, 2) - pow(a1, 2));
+        float equationResult2 = (pow( (Py + 500) ,2) /pow(a2, 2)) - pow(Px,2)/(pow(c2, 2) - pow(a2, 2));
         
-        if(abs(equationResult1-1) < (granularity/10) || abs(equationResult2-1) < (granularity/10)){
+        if(abs(equationResult1-1) < 0.1 || abs(equationResult2-1) < 0.1){
           fill(255, 200, 200, 100);
-          rect(x, y, granularity, granularity);
-          if(abs(equationResult1-1) < (granularity/10) && abs(equationResult2-1) < (granularity/10)
-          && Px > sectorStart.x && Px < sectorStart.x + sectorWidth
-          && -Py > sectorStart.y && -Py < sectorStart.y + sectorHeight){
-            fill(255,0,0,255);
-            circle(Px, -Py, 10);
+          rect(x, y, 1, 1);
+          if(abs(equationResult1-1) < 0.1 && abs(equationResult2-1) < 0.1){
+            //fill(255,0,0,255);
+            //circle(Px, -Py, 10);
             //break outer;
           }
         } else {

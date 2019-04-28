@@ -31,7 +31,7 @@ class Piezo{
   
   void drawPiezo(){
     fill(this.c);
-    circle(this.xPos, this.yPos, 20);
+    circle(this.xPos, this.yPos, 50);
     textSize(32);
     fill(50);
   }
